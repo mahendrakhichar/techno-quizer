@@ -8,7 +8,7 @@ const QuizList = () => {
 
   const QuizesHandler = async () => {
     try {
-      const response = await axios.get('/api/quizes');
+      const response = await axios.get('/api/quizzes/quizzesList');
       if (response.status === 200) {
         setQuizes(response.data);
         setIsLoading(false);
@@ -42,11 +42,11 @@ const QuizList = () => {
             <div className="space-y-4">
               {quizes.map((item, index) => (
                 <div key={index} className="p-4 bg-gray-100 rounded-lg shadow-sm">
-                  <div className="text-2xl font-semibold text-gray-800">{item.name}</div>
-                  <div className="text-lg text-gray-600">{item.code}</div>
+                  <div className="text-2xl font-semibold text-gray-800">{item.quizName}</div>
+                  <div className="text-lg text-gray-600">{item.quizCode}</div>
                   <div className="mt-4 text-center">
                     <button
-                      onClick={() => handleClick(item.totalQuestions)}
+                      onClick={() => handleClick(item.questions)}
                       className="px-6 py-3 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                       Start Quiz

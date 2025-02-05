@@ -2,6 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
 
+// eslint-disable-next-line react/prop-types
 const AllQuestion = ({ name, code }) => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -42,7 +43,7 @@ const AllQuestion = ({ name, code }) => {
         totalQuestions: validQuestions
       };
 
-      const response = await axios.post('/api/createQuiz', data);
+      const response = await axios.post('/api/quizzes/createQuiz', data);
 
       if (response.status === 200 || response.status === 201) {
         alert('Quiz created successfully!');
