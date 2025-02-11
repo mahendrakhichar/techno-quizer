@@ -41,4 +41,21 @@ const getQuizes = async (req, res) => {
     }
 };
 
-export { createQuiz, getQuizes };
+const checkCode = async(req,res)=>{
+    try{
+        const {code} = req.params;  
+        const quizExist = await Quiz.findOne({quizCode:code})
+        console.log(code);
+        if(quizExist){
+            console.log("quiz exist")
+            return res.status(400).json({message:"quiz already exist"});
+        }
+        console.log("not exist");
+        return res.status(200).json({message:" no quiz exist with given code"})
+    }
+    catch(error){
+        res.status(500).json({message:"server error"})
+    }
+}
+
+export { createQuiz, getQuizes, checkCode };
