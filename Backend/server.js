@@ -2,7 +2,9 @@ import express from 'express';
 import cors from "cors";
 import connectDB from './databse/db.js';
 import quizRoutes from './Routes/quizRoutes.js';
-
+import gptRoutes from './Routes/gptRoutes.js';
+import dotenv from 'dotenv'
+dotenv.config();
 const app = express();
 const port = 5000;
 
@@ -27,7 +29,7 @@ app.use((err, req, res, next) => {
 
 // Routes
 app.use('/quizzes', quizRoutes);
-
+app.use('/userQuestion', gptRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

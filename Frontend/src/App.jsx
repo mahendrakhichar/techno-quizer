@@ -3,10 +3,11 @@ import {useState} from 'react'
 import Home from './components/home/Home';
 import CreateQuiz from './components/createQuiz/CreateQuiz';
 import './App.css';
-import Questions from './components/createQuiz/Questions';
 import AllQuestion from './components/createQuiz/AllQuestion'
 import QuizList from './components/attemptQuiz/QuizList'
 import Quiz from './components/attemptQuiz/Quiz'
+import QuestionsWithGpt from './components/createQuiz/QuestionsWithGpt';
+
 function App() {
   const [questions, setQuestions] = useState([
     {
@@ -41,7 +42,8 @@ function App() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/createQuiz" element={<CreateQuiz name={name} updateName={updateName} code={code} updateCode = {updateCode}/>} />
-      <Route path="/createQuiz/questions" element = {<Questions questions={questions} updateQuestions= {updateQuestions} currQuestionInd={currQuestionInd} updateCurrQuestionInd={updateCurrQuestionInd} />} />
+      {/* <Route path="/createQuiz/questions" element = {<Questions questions={questions} updateQuestions= {updateQuestions} currQuestionInd={currQuestionInd} updateCurrQuestionInd={updateCurrQuestionInd} />} /> */}
+      <Route path="/createQuiz/questions" element = {<QuestionsWithGpt questions={questions} updateQuestions= {updateQuestions} currQuestionInd={currQuestionInd} updateCurrQuestionInd={updateCurrQuestionInd}/>} />
       <Route path = "/createQuiz/Questions/AllQuestion" element= {<AllQuestion name={name} code={code}/>}  />
       <Route path = "/attemptQuiz" element={<QuizList/> }/>
       <Route path = "/quiz" element = {<Quiz/>}/>
