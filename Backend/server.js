@@ -3,6 +3,8 @@ import cors from "cors";
 import connectDB from './databse/db.js';
 import quizRoutes from './Routes/quizRoutes.js';
 import gptRoutes from './Routes/gptRoutes.js';
+import adminAuthRoutes from './Routes/adminAuthRoutes.js'
+import userAuthRoutes from './Routes/userAuthRoutes.js'
 import dotenv from 'dotenv'
 dotenv.config();
 const app = express();
@@ -30,6 +32,9 @@ app.use((err, req, res, next) => {
 // Routes
 app.use('/quizzes', quizRoutes);
 app.use('/userQuestion', gptRoutes);
+//authentication routes
+app.use('/adminAuth',adminAuthRoutes);
+app.use('/userAuth',userAuthRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
