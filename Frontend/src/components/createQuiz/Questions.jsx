@@ -1,5 +1,7 @@
+import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { IoIosAddCircle, IoIosEye } from 'react-icons/io'; // Lucid-React Icons
 
 const Questions = ({ questions, updateQuestions, currQuestionInd, updateCurrQuestionInd }) => {
   const navigate = useNavigate();
@@ -32,70 +34,78 @@ const Questions = ({ questions, updateQuestions, currQuestionInd, updateCurrQues
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-md mt-8">
-      <form className="space-y-6">
-        <fieldset className="border p-4 rounded-lg shadow-sm">
-          <legend className="text-xl font-semibold text-gray-700 mb-4">Question</legend>
-          
-          {/* For the question */}
-          <textarea
-            name="question"
-            cols="30"
-            rows="6"
-            placeholder="Enter your question"
-            value={questions[currQuestionInd].question}
-            onChange={(e) => inputHandler(e, currQuestionInd)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          ></textarea>
-          
-          {/* Options a, b, c, d */}
-          {['a', 'b', 'c', 'd'].map((option, index) => (
-            <div key={index} className="flex items-center space-x-2">
-              <label htmlFor={option} className="font-medium text-gray-700">{option})</label>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-teal-400 via-blue-100 to-indigo-200 p-6">
+      <div className="w-full max-w-3xl bg-white p-8 rounded-lg shadow-xl transition-transform transform hover:scale-105">
+        <form className="space-y-8">
+          <fieldset className="border p-6 rounded-lg shadow-sm">
+            <legend className="text-2xl font-semibold text-gray-800 mb-4">Create a Question</legend>
+            
+            {/* Question Input */}
+            <div className="space-y-4">
+              <label className="block text-lg font-medium text-gray-700">Question:</label>
+              <textarea
+                name="question"
+                rows="4"
+                placeholder="Enter your question here"
+                value={questions[currQuestionInd].question}
+                onChange={(e) => inputHandler(e, currQuestionInd)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+              ></textarea>
+            </div>
+            
+            {/* Options Input */}
+            {['a', 'b', 'c', 'd'].map((option, index) => (
+              <div key={index} className="space-y-2">
+                <label htmlFor={option} className="block font-medium text-gray-700">{option})</label>
+                <input
+                  type="text"
+                  name={option}
+                  placeholder={`Option ${index + 1}`}
+                  value={questions[currQuestionInd][option]}
+                  onChange={(e) => inputHandler(e, currQuestionInd)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+                />
+              </div>
+            ))}
+
+            {/* Right Answer Input */}
+            <div className="space-y-2">
+              <label htmlFor="rightAnswer" className="block font-medium text-gray-700">Correct Answer:</label>
               <input
                 type="text"
-                name={option}
-                placeholder={`Option ${index + 1}`}
-                value={questions[currQuestionInd][option]}
+                name="rightAnswer"
+                placeholder="Enter the correct answer"
+                value={questions[currQuestionInd].rightAnswer}
                 onChange={(e) => inputHandler(e, currQuestionInd)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
               />
             </div>
-          ))}
 
-          {/* For right answer */}
-          <div className="flex items-center space-x-2">
-            <label htmlFor="rightAnswer" className="font-medium text-gray-700">Correct answer)</label>
-            <input
-              type="text"
-              name="rightAnswer"
-              placeholder="Right Answer"
-              value={questions[currQuestionInd].rightAnswer}
-              onChange={(e) => inputHandler(e, currQuestionInd)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
+            {/* Warning message */}
+            {warning && <p className="text-red-500 text-sm mt-2">{warning}</p>}
 
-          {/* Add new question button */}
-          {warning && <p className="text-red-500 text-sm">{warning}</p>}
+            {/* Add Question Button */}
+            <button
+              type="button"
+              onClick={addHandler}
+              className="w-full py-3 px-4 bg-teal-500 text-white font-semibold rounded-lg hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500 mt-4"
+            >
+              <IoIosAddCircle className="inline-block mr-2 text-xl" />
+              Add Question
+            </button>
+          </fieldset>
+        </form>
+
+        {/* All Questions Button */}
+        <div className="mt-8 text-center">
           <button
-            type="button"
-            onClick={addHandler}
-            className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 mt-4"
+            onClick={AllQuestionShow}
+            className="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
           >
-            Add Question
+            <IoIosEye className="inline-block mr-2 text-xl" />
+            View All Questions
           </button>
-        </fieldset>
-      </form>
-
-      {/* Display the list of all questions */}
-      <div className="mt-6 text-center">
-        <button
-          onClick={AllQuestionShow}
-          className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
-        >
-          All Questions
-        </button>
+        </div>
       </div>
     </div>
   );

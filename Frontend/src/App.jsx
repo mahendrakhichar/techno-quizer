@@ -7,7 +7,9 @@ import AllQuestion from './components/createQuiz/AllQuestion'
 import QuizList from './components/attemptQuiz/QuizList'
 import Quiz from './components/attemptQuiz/Quiz'
 import QuestionsWithGpt from './components/createQuiz/QuestionsWithGpt';
-
+import Dashboard from './components/dashboard/Dashboard';
+import AdminDashboard from './components/dashboard/AdminDashboard';
+import UserDashboard from './components/dashboard/UserDashboard';
 
 function App() {
   const [questions, setQuestions] = useState([

@@ -7,11 +7,11 @@ const MONGO_URI = process.env.MONGO_URI;
 const connectDB = async () => {
     try{
         const connect = await mongoose.connect(MONGO_URI);
-        console.log(`MongoDB connected: ${connect.connection.host}`);
+        console.log(`MongoDB connected`);
 
     }
-    catch(erroor){
-        console.error(`Error: ${erroor.message}`);
+    catch(error){
+        console.error(`Error: ${error.message}`);
         process.exit(1);
     }
 }
