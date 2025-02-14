@@ -12,17 +12,18 @@ const UserDashboard = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [valid , setValid] = useState(true); // it will be useful to check and give errors which we get on wrong authentication 
 
   const signup = async () => {
     try {
       const response = await axios.post('/api/userAuth/signup', { name, email, password });
       console.log(response);
       if (response.data.success) {
-        alert("account creted successfully")
-        navigate('/attemptQuiz');
+        setIsSignUpOpen(false);
+        // navigate('/attemptQuiz');
       } else {
+        setValid(false);
         console.log('Unable to create the account');
-        alert('this email is already registered')
       }
     } catch (err) {
       console.log("Something went wrong in sign-up", err);
@@ -34,9 +35,10 @@ const UserDashboard = () => {
       const response = await axios.post('/api/userAuth/login', { email, password });
       console.log(response);
       if (response.data.success) {
+        setIsLoginOpen(false);
         navigate('/attemptQuiz');
       } else {
-        alert('there is no such account exist')
+        setValid(false);
         console.log("Unable to log you in, try again.");
       }
     } catch (err) {
@@ -70,14 +72,14 @@ const UserDashboard = () => {
 
       {/* Sign Up Modal */}
       {isSignUpOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center" onClick={() => (setIsSignUpOpen(false), setValid(true))}>
           <div
             className="bg-white p-8 rounded-lg shadow-lg w-96 relative"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Close Button */}
             <button
-              onClick={() => setIsSignUpOpen(false)}
+              onClick={() => (setIsSignUpOpen(false), setValid(true))}
               className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
             >
               <FaTimes className="text-2xl" />
@@ -120,20 +122,27 @@ const UserDashboard = () => {
             >
               Sign Up
             </button>
+            {
+              isSignUpOpen && valid == false ? (
+                <div>
+                  <p className="text-red-500">This email is already exist</p>
+                </div>
+              ):""
+            }
           </div>
         </div>
       )}
 
       {/* Login Modal */}
       {isLoginOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center" onClick={() => (setIsLoginOpen(false), setValid(true))}>
           <div
             className="bg-white p-8 rounded-lg shadow-lg w-96 relative"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Close Button */}
             <button
-              onClick={() => setIsLoginOpen(false)}
+              onClick={() => (setIsLoginOpen(false), setValid(true))}
               className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
             >
               <FaTimes className="text-2xl" />
@@ -166,6 +175,13 @@ const UserDashboard = () => {
             >
               Login
             </button>
+            {
+              isLoginOpen && valid == false ? (
+                <div>
+                  <p className="text-red-500">No such user exist, please signUp</p>
+                </div>
+              ):""
+            }
           </div>
         </div>
       )}

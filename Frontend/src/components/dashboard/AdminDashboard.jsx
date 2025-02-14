@@ -12,6 +12,8 @@ const AdminDashboard = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const [valid , setValid] = useState(true);
+
   const signUpHandler = () => {
     setIsSignUpOpen(true);
     setIsLoginOpen(false);
@@ -29,10 +31,9 @@ const AdminDashboard = () => {
       if (response.data.success) {
         // Assuming you want to close the modal and maybe redirect after signup success.
         setIsSignUpOpen(false);
-        alert("Account Created successfullly")
-        navigate('/createQuiz')
+        // navigate('/createQuiz')
       } else {
-        alert("email already registered")
+        setValid(false);
         console.log('Unable to create the account');
       }
     } catch (err) {
@@ -49,6 +50,7 @@ const AdminDashboard = () => {
         setIsLoginOpen(false);
         navigate('/createQuiz')
       } else {
+        setValid(false);
         console.log("Unable to log you in, try again.");
       }
     } catch (err) {
@@ -82,13 +84,13 @@ const AdminDashboard = () => {
 
       {/* Sign Up Modal */}
       {isSignUpOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center" onClick={() => setIsSignUpOpen(false)}>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center" onClick={() => (setIsSignUpOpen(false), setValid(true))}>
           <div
             className="bg-white p-8 rounded-lg shadow-lg w-96 relative"
             onClick={(e) => e.stopPropagation()}
           >
             <FiXCircle
-              onClick={() => setIsSignUpOpen(false)}
+              onClick={() => (setIsSignUpOpen(false), setValid(true))}
               className="absolute top-4 right-4 text-2xl text-gray-500 cursor-pointer hover:text-gray-700"
             />
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">Create Account</h2>
@@ -128,19 +130,26 @@ const AdminDashboard = () => {
             >
               Sign Up
             </button>
+            {
+              isSignUpOpen && valid == false ? (
+                <div>
+                  <p className="text-red-500">This email is already exist</p>
+                </div>
+              ):""
+            }
           </div>
         </div>
       )}
 
       {/* Login Modal */}
       {isLoginOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center" onClick={() => setIsLoginOpen(false)}>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center" onClick={() => (setIsLoginOpen(false), setValid(true))}>
           <div
             className="bg-white p-8 rounded-lg shadow-lg w-96 relative"
             onClick={(e) => e.stopPropagation()}
           >
             <FiXCircle
-              onClick={() => setIsLoginOpen(false)}
+              onClick={() => (setIsLoginOpen(false), setValid(true))}
               className="absolute top-4 right-4 text-2xl text-gray-500 cursor-pointer hover:text-gray-700"
             />
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">Login</h2>
@@ -170,6 +179,13 @@ const AdminDashboard = () => {
             >
               Login
             </button>
+            {
+              isLoginOpen && valid == false ? (
+                <div>
+                  <p className="text-red-500">No such Admin exist, please signUp</p>
+                </div>
+              ):""
+            }
           </div>
         </div>
       )}
