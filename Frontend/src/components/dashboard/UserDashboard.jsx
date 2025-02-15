@@ -2,9 +2,13 @@ import { FaUserCircle, FaSignInAlt, FaUserPlus, FaTimes } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import axios from "axios";
+//redux
+import { useDispatch, useSelector } from "react-redux";
+import { logIn, logout } from "../../redux/userSlice";
 
 const UserDashboard = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -16,7 +20,7 @@ const UserDashboard = () => {
 
   const signup = async () => {
     try {
-      const response = await axios.post('/api/userAuth/signup', { name, email, password });
+      const response = await axios.post('/api/userAuth/signup: response.data.user.name,', { name, email, password });
       console.log(response);
       if (response.data.success) {
         setIsSignUpOpen(false);
@@ -33,9 +37,10 @@ const UserDashboard = () => {
   const login = async () => {
     try {
       const response = await axios.post('/api/userAuth/login', { email, password });
-      console.log(response);
+      console.log(response.data);
       if (response.data.success) {
         setIsLoginOpen(false);
+        dispatch(logIn({ name:response.data.user.name, email }));
         navigate('/attemptQuiz');
       } else {
         setValid(false);

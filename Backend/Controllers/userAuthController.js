@@ -28,7 +28,7 @@ const login = async(req,res)=>{
         const user = await User.findOne({email})
         if(user){
             if(user.password === password){
-                res.status(200).json({message:"login successful", success:true})
+                res.status(200).json({message:"login successful", success:true, user})
             }
         }
         else{

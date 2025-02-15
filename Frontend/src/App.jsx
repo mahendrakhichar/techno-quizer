@@ -7,11 +7,15 @@ import AllQuestion from './components/createQuiz/AllQuestion'
 import QuizList from './components/attemptQuiz/QuizList'
 import Quiz from './components/attemptQuiz/Quiz'
 import QuestionsWithGpt from './components/createQuiz/QuestionsWithGpt';
-import Dashboard from './components/dashboard/Dashboard';
-import AdminDashboard from './components/dashboard/AdminDashboard';
-import UserDashboard from './components/dashboard/UserDashboard';
+import {Provider, useSelector} from 'react-redux';
+import store from './redux/store';
+import Profile from './components/profile/Profile';
+
 
 function App() {
+  
+  const { loggedIn } = useSelector((state) => state.user);
+
   const [questions, setQuestions] = useState([
     {
       question: '',
@@ -31,7 +35,7 @@ function App() {
     setCurrQuestionInd(newCurrQuestionInd)
   }
 
-  // create quiz
+  // create quiz(quiz name, quiz code);
   const [name, setName] = useState('');
   const [code, setCode] = useState('');
 
@@ -42,15 +46,18 @@ function App() {
     setCode(newCode)
   }
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/createQuiz" element={<CreateQuiz name={name} updateName={updateName} code={code} updateCode = {updateCode}/>} />
-      {/* <Route path="/createQuiz/questions" element = {<Questions questions={questions} updateQuestions= {updateQuestions} currQuestionInd={currQuestionInd} updateCurrQuestionInd={updateCurrQuestionInd} />} /> */}
-      <Route path="/createQuiz/questions" element = {<QuestionsWithGpt questions={questions} updateQuestions= {updateQuestions} currQuestionInd={currQuestionInd} updateCurrQuestionInd={updateCurrQuestionInd}/>} />
-      <Route path = "/createQuiz/Questions/AllQuestion" element= {<AllQuestion name={name} code={code}/>}  />
-      <Route path = "/attemptQuiz" element={<QuizList/> }/>
-      <Route path = "/quiz" element = {<Quiz/>}/>
-    </Routes>
+      <div>
+        {loggedIn && <Profile/>}
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/createQuiz" element={<CreateQuiz name={name} updateName={updateName} code={code} updateCode = {updateCode}/>} />
+          {/* <Route path="/createQuiz/questions" element = {<Questions questions={questions} updateQuestions= {updateQuestions} currQuestionInd={currQuestionInd} updateCurrQuestionInd={updateCurrQuestionInd} />} /> */}
+          <Route path="/createQuiz/questions" element = {<QuestionsWithGpt questions={questions} updateQuestions= {updateQuestions} currQuestionInd={currQuestionInd} updateCurrQuestionInd={updateCurrQuestionInd}/>} />
+          <Route path = "/createQuiz/Questions/AllQuestion" element= {<AllQuestion name={name} code={code}/>}  />
+          <Route path = "/attemptQuiz" element={<QuizList/> }/>
+          <Route path = "/quiz" element = {<Quiz/>}/>
+        </Routes>
+      </div>
   );
 }
 
