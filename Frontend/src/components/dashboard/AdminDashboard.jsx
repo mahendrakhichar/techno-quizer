@@ -3,9 +3,12 @@ import React, { useState } from "react";
 import axios from "axios";
 import { FiXCircle } from "react-icons/fi"; // Added Close Icon
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logIn,logout } from "../../redux/adminSlice";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [name, setName] = useState('');
@@ -46,7 +49,12 @@ const AdminDashboard = () => {
       const response = await axios.post('/api/adminAuth/login', { email, password });
       console.log(response);
       if (response.data.success) {
-        // Assuming you want to close the modal and maybe redirect after login success.
+        // now add some security by jwt tokens
+        const token = response.data.token;
+        localStorage.setItem('token', token);
+        // redux state managment
+        dispatch(logIn({name:response.data.admin.name, email})) // this is for state mangament for login and logout
+        // to check login popup in open or not 
         setIsLoginOpen(false);
         navigate('/createQuiz')
       } else {

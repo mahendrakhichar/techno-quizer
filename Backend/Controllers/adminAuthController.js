@@ -1,4 +1,6 @@
 import { Admin } from "../Models/adminModel.js"
+import dotenv from 'dotenv'
+dotenv.config();
 
 const signUp = async(req,res)=>{
     const {name,email,password} = req.body;
@@ -28,7 +30,13 @@ const login = async(req,res)=>{
         const admin = await Admin.findOne({email})
         if(admin){
             if(admin.password === password){
-                res.status(200).json({message:"login successful", success:true})
+                // creating jwt token 
+                const token = jwt.sign(
+                    {id:admin._id}, //payload
+                    process.env.JWT_SECRET, // secret key
+                    {expiresIn: '1h'}, // expiry of the token 
+                )
+                res.status(200).json({message:"login successful", success:true, admin, token})
             }
         }
         else{

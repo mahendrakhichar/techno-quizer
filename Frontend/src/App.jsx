@@ -10,11 +10,13 @@ import QuestionsWithGpt from './components/createQuiz/QuestionsWithGpt';
 import {Provider, useSelector} from 'react-redux';
 import store from './redux/store';
 import Profile from './components/profile/Profile';
+import AdminProfile from './components/profile/AdminProfile';
 
 
 function App() {
   
   const { loggedIn } = useSelector((state) => state.user);
+  const {loggedInAdmin} = useSelector((state)=>state.admin);
 
   const [questions, setQuestions] = useState([
     {
@@ -48,6 +50,7 @@ function App() {
   return (
       <div>
         {loggedIn && <Profile/>}
+        {loggedInAdmin && <AdminProfile/>}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/createQuiz" element={<CreateQuiz name={name} updateName={updateName} code={code} updateCode = {updateCode}/>} />

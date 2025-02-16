@@ -42,8 +42,18 @@ const AllQuestion = ({ name, code }) => {
         code: String(code),
         totalQuestions: validQuestions
       };
+      //adding security to routes using jwt 
+      const token = localStorage.getItem('token');
+      if(!token){
+        alert('Please, login first to create the quiz');
+        return;
+      }
 
-      const response = await axios.post('/api/quizzes/createQuiz', data);
+      const response = await axios.post('/api/quizzes/createQuiz', data,{
+        headers:{
+          'Authorization':`Bearer ${token}`,
+        }
+      });
 
       if (response.status === 200 || response.status === 201) {
         alert('Quiz created successfully!');
