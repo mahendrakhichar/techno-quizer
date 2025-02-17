@@ -1,4 +1,7 @@
 import {User} from '../Models/userModel.js'
+import jwt from 'jsonwebtoken'
+import dotenv from 'dotenv'
+dotenv.config();
 
 const signUp = async(req,res)=>{
     const {name,email,password} = req.body;
@@ -28,7 +31,12 @@ const login = async(req,res)=>{
         const user = await User.findOne({email})
         if(user){
             if(user.password === password){
-                res.status(200).json({message:"login successful", success:true, user})
+                const token = jwt.sign(
+                    {id: user._id},
+                    process.env.JWT_SECRET,
+                    {expiresIn:'1hr'},
+                )
+                res.status(200).json({message:"login successful", success:true, user, token})
             }
         }
         else{

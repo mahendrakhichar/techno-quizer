@@ -12,8 +12,19 @@ const QuizList = () => {
   const navigate = useNavigate();
 
   const QuizesHandler = async () => {
+    const token = localStorage.getItem('token');
+    if(!token){
+      alert('Please, Login first');
+      return;
+    }
     try {
-      const response = await axios.get("/api/quizzes/quizzesList");
+      const response = await axios.get("/api/quizzes/quizzesList",
+        {
+          headers:{
+            'Authorization' : `Bearer ${token}`,
+          }
+        }
+      );
       if (response.status === 200) {
         setQuizes(response.data);
         setFilteredQuizes(response.data);

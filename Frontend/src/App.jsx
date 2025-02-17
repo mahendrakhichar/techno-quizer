@@ -11,6 +11,8 @@ import {Provider, useSelector} from 'react-redux';
 import store from './redux/store';
 import Profile from './components/profile/Profile';
 import AdminProfile from './components/profile/AdminProfile';
+// to add secuity to routes so no one can directly access the route/ prevernt unauthourized access
+import PrivateRoute from './components/privateRoute/PrivateRoute';
 
 
 function App() {
@@ -53,12 +55,15 @@ function App() {
         {loggedInAdmin && <AdminProfile/>}
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/createQuiz" element={<CreateQuiz name={name} updateName={updateName} code={code} updateCode = {updateCode}/>} />
-          {/* <Route path="/createQuiz/questions" element = {<Questions questions={questions} updateQuestions= {updateQuestions} currQuestionInd={currQuestionInd} updateCurrQuestionInd={updateCurrQuestionInd} />} /> */}
-          <Route path="/createQuiz/questions" element = {<QuestionsWithGpt questions={questions} updateQuestions= {updateQuestions} currQuestionInd={currQuestionInd} updateCurrQuestionInd={updateCurrQuestionInd}/>} />
-          <Route path = "/createQuiz/Questions/AllQuestion" element= {<AllQuestion name={name} code={code}/>}  />
-          <Route path = "/attemptQuiz" element={<QuizList/> }/>
-          <Route path = "/quiz" element = {<Quiz/>}/>
+          {/* some private routes so only authenticated peoples can acess */}
+          <Route element= {<PrivateRoute/>}>
+            <Route path="/createQuiz" element={<CreateQuiz name={name} updateName={updateName} code={code} updateCode = {updateCode}/>} />
+            <Route path="/createQuiz/questions" element = {<QuestionsWithGpt questions={questions} updateQuestions= {updateQuestions} currQuestionInd={currQuestionInd} updateCurrQuestionInd={updateCurrQuestionInd}/>} />
+            <Route path = "/createQuiz/Questions/AllQuestion" element= {<AllQuestion name={name} code={code}/>}  />
+            <Route path = "/attemptQuiz" element={<QuizList/> }/>
+            <Route path = "/quiz" element = {<Quiz/>}/>
+          </Route>
+
         </Routes>
       </div>
   );

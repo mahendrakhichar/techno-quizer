@@ -39,6 +39,8 @@ const UserDashboard = () => {
       const response = await axios.post('/api/userAuth/login', { email, password });
       console.log(response.data);
       if (response.data.success) {
+        const token = response.data.token;
+        localStorage.setItem('token', token);
         setIsLoginOpen(false);
         dispatch(logIn({ name:response.data.user.name, email }));
         navigate('/attemptQuiz');

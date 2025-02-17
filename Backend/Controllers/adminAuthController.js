@@ -1,5 +1,6 @@
 import { Admin } from "../Models/adminModel.js"
 import dotenv from 'dotenv'
+import jwt from 'jsonwebtoken'
 dotenv.config();
 
 const signUp = async(req,res)=>{
@@ -37,6 +38,9 @@ const login = async(req,res)=>{
                     {expiresIn: '1h'}, // expiry of the token 
                 )
                 res.status(200).json({message:"login successful", success:true, admin, token})
+            }
+            else{
+                res.status(401).json({message:"incorrect password"});
             }
         }
         else{
