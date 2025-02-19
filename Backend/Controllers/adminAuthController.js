@@ -37,7 +37,7 @@ const login = async(req,res)=>{
                     process.env.JWT_SECRET, // secret key
                     {expiresIn: '1h'}, // expiry of the token 
                 )
-                res.status(200).json({message:"login successful", success:true, admin, token})
+                res.status(200).json({message:"login successful", success:true, admin, token, role:"admin"})
             }
             else{
                 res.status(401).json({message:"incorrect password"});

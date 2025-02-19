@@ -36,7 +36,7 @@ const login = async(req,res)=>{
                     process.env.JWT_SECRET,
                     {expiresIn:'1hr'},
                 )
-                res.status(200).json({message:"login successful", success:true, user, token})
+                res.status(200).json({message:"login successful", success:true, user, token, role:"user"})
             }
         }
         else{

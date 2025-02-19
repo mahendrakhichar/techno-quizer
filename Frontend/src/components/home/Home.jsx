@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import AdminDashboard from '../dashboard/AdminDashboard';  // Assuming the AdminDashboard component is in the same folder
-import UserDashboard from '../dashboard/UserDashboard';  // Assuming the UserDashboard component is in the same folder
+import AdminLogin from '../logins/AdminLogin';  // Assuming the AdminDashboard component is in the same folder
+import UserLogin from '../logins/UserLogin';  // Assuming the UserDashboard component is in the same folder
 
 const Home = () => {
   const [isAdminOpen, setIsAdminOpen] = useState(false);
@@ -52,7 +52,7 @@ const Home = () => {
             className="bg-white p-8 rounded-lg shadow-lg w-11/12 sm:w-96 lg:w-1/2 max-w-lg relative"
             onClick={(e) => e.stopPropagation()}
           >
-            <AdminDashboard />
+            <AdminLogin />
             <button
               onClick={closeModal}
               className="mt-4 w-full px-6 py-3 bg-red-500 text-white rounded-lg"
@@ -73,7 +73,7 @@ const Home = () => {
             className="bg-white p-8 rounded-lg shadow-lg w-11/12 sm:w-96 lg:w-1/2 max-w-lg"
             onClick={(e) => e.stopPropagation()}
           >
-            <UserDashboard />
+            <UserLogin />
             <button
               onClick={closeModal}
               className="mt-4 w-full px-6 py-3 bg-red-500 text-white rounded-lg"

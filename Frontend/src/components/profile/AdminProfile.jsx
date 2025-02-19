@@ -14,7 +14,8 @@ const AdminProfile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const logoutHandler=()=>{
-    localStorage.removeItem('token');
+    localStorage.removeItem('token',);
+    localStorage.removeItem('role');
     dispatch(logout());
     navigate('/');
   }

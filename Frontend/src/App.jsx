@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route , Navigate } from 'react-router-dom';
 import {useState} from 'react'
 import Home from './components/home/Home';
 import CreateQuiz from './components/createQuiz/CreateQuiz';
@@ -13,6 +13,7 @@ import Profile from './components/profile/Profile';
 import AdminProfile from './components/profile/AdminProfile';
 // to add secuity to routes so no one can directly access the route/ prevernt unauthourized access
 import PrivateRoute from './components/privateRoute/PrivateRoute';
+import { Ruler } from 'lucide-react';
 
 
 function App() {
@@ -49,19 +50,37 @@ function App() {
   const updateCode = (newCode)=>{
     setCode(newCode)
   }
+
+  // private routing 
+  const userType = localStorage.getItem('role');
+  const token = localStorage.getItem('token');
   return (
       <div>
-        {loggedIn && <Profile/>}
-        {loggedInAdmin && <AdminProfile/>}
+        {
+          userType == 'user' && (<Profile/>)
+        }
+        {
+          userType == 'admin' && (<AdminProfile/>)
+        }
         <Routes>
-          <Route path="/" element={<Home />} />
-          {/* some private routes so only authenticated peoples can acess */}
+          {token && <Route path='/' element={<Navigate to = {userType == 'user' ? '/attemptQuiz': '/createQuiz'} />} />}
+          {!token && <Route path='/' element={<Home/>}/>}
           <Route element= {<PrivateRoute/>}>
-            <Route path="/createQuiz" element={<CreateQuiz name={name} updateName={updateName} code={code} updateCode = {updateCode}/>} />
-            <Route path="/createQuiz/questions" element = {<QuestionsWithGpt questions={questions} updateQuestions= {updateQuestions} currQuestionInd={currQuestionInd} updateCurrQuestionInd={updateCurrQuestionInd}/>} />
-            <Route path = "/createQuiz/Questions/AllQuestion" element= {<AllQuestion name={name} code={code}/>}  />
-            <Route path = "/attemptQuiz" element={<QuizList/> }/>
-            <Route path = "/quiz" element = {<Quiz/>}/>
+            {
+              userType == 'user' && (
+              <>
+                <Route path = "/attemptQuiz" element={<QuizList/> }/>
+                <Route path = "/quiz" element = {<Quiz/>}/>
+              </>
+              )}
+              {
+                userType == 'admin' &&(
+              <>  
+                <Route path="/createQuiz" element={<CreateQuiz name={name} updateName={updateName} code={code} updateCode = {updateCode}/>} />
+                <Route path="/createQuiz/questions" element = {<QuestionsWithGpt questions={questions} updateQuestions= {updateQuestions} currQuestionInd={currQuestionInd} updateCurrQuestionInd={updateCurrQuestionInd}/>} />
+                <Route path = "/createQuiz/Questions/AllQuestion" element= {<AllQuestion name={name} code={code}/>}  />
+              </>
+              )}
           </Route>
 
         </Routes>
