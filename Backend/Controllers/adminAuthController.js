@@ -25,31 +25,37 @@ const signUp = async(req,res)=>{
     }
 }
 
-const login = async(req,res)=>{
-    const {email,password} = req.body;
-    try{
-        const admin = await Admin.findOne({email})
-        if(admin){
-            if(admin.password === password){
-                // creating jwt token 
-                const token = jwt.sign(
-                    {id:admin._id}, //payload
-                    process.env.JWT_SECRET, // secret key
-                    {expiresIn: '1h'}, // expiry of the token 
-                )
-                res.status(200).json({message:"login successful", success:true, admin, token, role:"admin"})
-            }
-            else{
-                res.status(401).json({message:"incorrect password"});
-            }
-        }
-        else{
-            res.status(201).json({message:"no such admin exist", success:false})
-        }
+const login = async (req, res) => {
+    const { email, password } = req.body;
+    try {
+      const admin = await Admin.findOne({ email });
+      if (!admin) {
+        return res.status(404).json({ message: "No such admin exists. Please register first.", success: false });
+      }
+  
+      if (admin.password !== password) {
+        return res.status(400).json({ message: "Incorrect password. Please try again.", success: false });
+      }
+  
+      const token = jwt.sign(
+        { id: admin._id },
+        process.env.JWT_SECRET,
+        { expiresIn: '1h' }
+      );
+  
+      return res.status(200).json({
+        message: "Login successful",
+        success: true,
+        admin,
+        token,
+        role: "admin"
+      });
+  
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Unable to log you in, please try again later.", success: false });
     }
-    catch(err){
-        res.status(500).json({message:"unable to loged you in ", success:false})
-    }
-}
+  };
+  
 
 export {signUp, login}

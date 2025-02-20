@@ -15,7 +15,7 @@ const AdminLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const [valid , setValid] = useState(true);
+  const [Error , setError] = useState(true);
 
   const signUpHandler = () => {
     setIsSignUpOpen(true);
@@ -30,16 +30,17 @@ const AdminLogin = () => {
   const signup = async () => {
     try {
       const response = await axios.post('/api/adminAuth/signup', { name, email, password });
-      console.log(response);
+      console.log(response.data.message);
       if (response.data.success) {
         // Assuming you want to close the modal and maybe redirect after signup success.
         setIsSignUpOpen(false);
         // navigate('/createQuiz')
       } else {
-        setValid(false);
+        setError(false);
         console.log('Unable to create the account');
       }
     } catch (err) {
+      alert("check email or password!!!")
       console.log("Something went wrong in sign-up", err);
     }
   };
@@ -47,26 +48,37 @@ const AdminLogin = () => {
   const login = async () => {
     try {
       const response = await axios.post('/api/adminAuth/login', { email, password });
-      console.log(response);
+  
+      console.log(response.data.message);
+  
       if (response.data.success) {
-        // now add some security by jwt tokens
         const token = response.data.token;
         const role = response.data.role;
         localStorage.setItem('token', token);
-        localStorage.setItem('role',role);
-        // redux state managment
-        dispatch(logIn({name:response.data.admin.name, email})) // this is for state mangament for login and logout
-        // to check login popup in open or not 
+        localStorage.setItem('role', role);
+  
+        dispatch(logIn({ name: response.data.admin.name, email }));
+  
         setIsLoginOpen(false);
-        navigate('/createQuiz')
+        navigate('/createQuiz');
+        console.log(response.data.message);
       } else {
-        setValid(false);
-        console.log("Unable to log you in, try again.");
+        if (response.data.message === "No such admin exists. Please register first.") {
+          setError("No such admin exists. Please register first.");
+        } else if (response.data.message === "Incorrect password. Please try again.") {
+          setError("Incorrect password. Please try again.");
+        } else {
+          setError("Something went wrong, please try again.");
+        }
+        setError(false);
       }
     } catch (err) {
-      console.log("Something went wrong in login", err);
+      console.error("Login error: ", err);
+      setError("An unexpected error occurred. Please try again later.");
+      setError(false);
     }
   };
+  
 
   return (
     <div className="min-h-100 bg-gray-50 p-8">
@@ -94,13 +106,13 @@ const AdminLogin = () => {
 
       {/* Sign Up Modal */}
       {isSignUpOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center" onClick={() => (setIsSignUpOpen(false), setValid(true))}>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center" onClick={() => (setIsSignUpOpen(false), setError(true))}>
           <div
             className="bg-white p-8 rounded-lg shadow-lg w-96 relative"
             onClick={(e) => e.stopPropagation()}
           >
             <FiXCircle
-              onClick={() => (setIsSignUpOpen(false), setValid(true))}
+              onClick={() => (setIsSignUpOpen(false), setError(true))}
               className="absolute top-4 right-4 text-2xl text-gray-500 cursor-pointer hover:text-gray-700"
             />
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">Create Account</h2>
@@ -141,7 +153,7 @@ const AdminLogin = () => {
               Sign Up
             </button>
             {
-              isSignUpOpen && valid == false ? (
+              isSignUpOpen && Error == false ? (
                 <div>
                   <p className="text-red-500">This email is already exist</p>
                 </div>
@@ -153,13 +165,13 @@ const AdminLogin = () => {
 
       {/* Login Modal */}
       {isLoginOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center" onClick={() => (setIsLoginOpen(false), setValid(true))}>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center" onClick={() => (setIsLoginOpen(false), setError(true))}>
           <div
             className="bg-white p-8 rounded-lg shadow-lg w-96 relative"
             onClick={(e) => e.stopPropagation()}
           >
             <FiXCircle
-              onClick={() => (setIsLoginOpen(false), setValid(true))}
+              onClick={() => (setIsLoginOpen(false), setError(true))}
               className="absolute top-4 right-4 text-2xl text-gray-500 cursor-pointer hover:text-gray-700"
             />
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">Login</h2>
@@ -190,7 +202,7 @@ const AdminLogin = () => {
               Login
             </button>
             {
-              isLoginOpen && valid == false ? (
+              isLoginOpen && Error == false ? (
                 <div>
                   <p className="text-red-500">No such Admin exist, please signUp</p>
                 </div>
