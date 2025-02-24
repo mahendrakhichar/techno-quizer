@@ -60,7 +60,7 @@ const AdminLogin = () => {
         dispatch(logIn({ name: response.data.admin.name, email }));
   
         setIsLoginOpen(false);
-        navigate('/createQuiz');
+        navigate('/AdminDashboard');
         console.log(response.data.message);
       } else {
         if (response.data.message === "No such admin exists. Please register first.") {

@@ -1,12 +1,18 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { IoIosRocket, IoIosCheckmarkCircleOutline } from 'react-icons/io'; // Lucid-React Icons for quiz vibe
+import { IoIosRocket, IoIosCheckmarkCircleOutline } from 'react-icons/io'; // Icons for quiz vibe
 
-const CreateQuiz = ({ name, updateName, code, updateCode }) => {
+const CreateQuiz = () => {
   const navigate = useNavigate();
+
+  // State for quiz details
+  const [name, setName] = useState('');
+  const [code, setCode] = useState('');
+  const [duration, setDuration] = useState('');
+  const [totalQuestions, setTotalQuestions] = useState('');
   const [uniqueCode, setUniqueCode] = useState(false);
-  const [loading, setLoading] = useState(false); // To handle loading state
+  const [loading, setLoading] = useState(false);
 
   // Check uniqueness of quiz code whenever the code changes
   useEffect(() => {
@@ -33,7 +39,7 @@ const CreateQuiz = ({ name, updateName, code, updateCode }) => {
   // Navigate to the next page only if the inputs are valid
   const nextHandler = (e) => {
     e.preventDefault();
-    if (name.trim() && code.trim() && uniqueCode) {
+    if (name.trim() && code.trim() && uniqueCode && duration && totalQuestions) {
       navigate('/createQuiz/questions');
     }
   };
@@ -45,28 +51,28 @@ const CreateQuiz = ({ name, updateName, code, updateCode }) => {
           <IoIosRocket className="inline-block text-4xl text-teal-600 mr-2" />
           Let's Create Your Quiz
         </h1>
-        <form onSubmit={nextHandler} className="space-y-4">
+        <form onSubmit={nextHandler} className="space-y-6">
           {/* Quiz Name Input */}
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">Quiz Name</label>
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">Quiz Name</label>
             <input
               type="text"
               placeholder="Enter your Quiz name"
               value={name}
-              onChange={(e) => updateName(e.target.value)}
-              className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-teal-500 focus:outline-none"
+              onChange={(e) => setName(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-teal-500 focus:outline-none"
             />
           </div>
 
           {/* Quiz Code Input */}
           <div>
-            <label htmlFor="code" className="block text-sm font-medium text-gray-700">Quiz Code</label>
+            <label htmlFor="code" className="block text-sm font-medium text-gray-700 mb-2">Quiz Code</label>
             <input
               type="text"
               placeholder="Enter your Quiz code"
               value={code}
-              onChange={(e) => updateCode(e.target.value)}
-              className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-teal-500 focus:outline-none"
+              onChange={(e) => setCode(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-teal-500 focus:outline-none"
             />
             {/* Code Status Message */}
             {loading ? (
@@ -85,13 +91,37 @@ const CreateQuiz = ({ name, updateName, code, updateCode }) => {
             )}
           </div>
 
+          {/* Duration Input */}
+          <div>
+            <label htmlFor="duration" className="block text-sm font-medium text-gray-700 mb-2">Duration (minutes)</label>
+            <input
+              type="number"
+              placeholder="Enter duration"
+              value={duration}
+              onChange={(e) => setDuration(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-teal-500 focus:outline-none"
+            />
+          </div>
+
+          {/* Total Questions Input */}
+          <div>
+            <label htmlFor="totalQuestions" className="block text-sm font-medium text-gray-700 mb-2">Total Questions</label>
+            <input
+              type="number"
+              placeholder="Enter number of questions"
+              value={totalQuestions}
+              onChange={(e) => setTotalQuestions(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-teal-500 focus:outline-none"
+            />
+          </div>
+
           {/* Next Button */}
           <div className="flex justify-center mt-6">
             <button
               type="submit"
-              disabled={!name.trim() || !code.trim() || !uniqueCode} // Disable if inputs are not valid or code isn't unique
+              disabled={!name.trim() || !code.trim() || !uniqueCode || !duration || !totalQuestions} // Disable if inputs are not valid or code isn't unique
               className={`w-full py-2 px-4 font-semibold rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500
-                ${!name.trim() || !code.trim() || !uniqueCode ? 'bg-gray-400 cursor-not-allowed' : 'bg-teal-500 text-white hover:bg-teal-600'}
+                ${!name.trim() || !code.trim() || !uniqueCode || !duration || !totalQuestions ? 'bg-gray-400 cursor-not-allowed' : 'bg-teal-500 text-white hover:bg-teal-600'}
               `}
             >
               <IoIosRocket className="inline-block mr-2 text-2xl" />

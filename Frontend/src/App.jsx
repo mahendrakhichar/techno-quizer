@@ -56,34 +56,41 @@ function App() {
 
   return (
     <div>
-      <Routes>
-        {token && <Route path='/' element={<Navigate to={userType === 'user' ? '/userDashboard' : '/adminDashboard'} />} />}
-        {!token && <Route path='/' element={<Home />} />}
-
-        {/* Private routes */}
-        <Route element={<PrivateRoute />}>
+      {/* <Routes>
+        {!token && (
+          <>
+            <Route path='/' element={<Home />} />
+            <Route path='/*' element={<Home />} />
+          </>
+        )}
+        <Route element={<PrivateRoute/>}>
           {
-            // If the user is logged in and is a user
-            userType === 'user' && (
-              <>
-                <Route path='/userDashboard' element={<UserDashboard />} />
-                <Route path='/attemptQuiz' element={<QuizList />} />
-                <Route path='/quiz' element={<Quiz />} />
-              </>
-            )}
-
-            {
-              // If the user is logged in and is an admin
-              userType === 'admin' && (
-                <>
-                  <Route path='/adminDashboard' element={<AdminDashboard />} />
-                  <Route path='/createQuiz' element={<CreateQuiz name={name} updateName={updateName} code={code} updateCode={updateCode} />} />
-                  <Route path='/createQuiz/questions' element={<QuestionsWithGpt questions={questions} updateQuestions={updateQuestions} currQuestionInd={currQuestionInd} updateCurrQuestionInd={updateCurrQuestionInd} />} />
-                  <Route path='/createQuiz/Questions/AllQuestion' element={<AllQuestion name={name} code={code} />} />
-                </>
-              )
-            }
+            userType != 'admin' ? (<>
+              <Route path='/' element={<Navigate to = "/UserDashboard" />}/>
+              <Route path='/UserDashboard' element={<UserDashboard />} />
+              <Route path='/attemptQuiz' element={<QuizList />} />
+              <Route path='/quiz' element={<Quiz />} />
+            </>):(<>
+                <Route path='/' element={<Navigate to = "/AdminDashboard" />}/>
+                <Route path='/AdminDashboard' element={<AdminDashboard />} />
+                <Route path='/createQuiz' element={<CreateQuiz name={name} updateName={updateName} code={code} updateCode={updateCode} />} />
+                <Route path='/createQuiz/questions' element={<QuestionsWithGpt questions={questions} updateQuestions={updateQuestions} currQuestionInd={currQuestionInd} updateCurrQuestionInd={updateCurrQuestionInd} />} />
+                <Route path='/createQuiz/Questions/AllQuestion' element={<AllQuestion name={name} code={code} />} />
+            </>)
+          }
         </Route>
+      </Routes> */}
+
+
+      <Routes>
+        <Route path='/' element={<Home />}/>
+        <Route path='/UserDashboard' element={<UserDashboard />} />
+        <Route path='/attemptQuiz' element={<QuizList />} />
+        <Route path='/quiz' element={<Quiz />} />
+        <Route path='/AdminDashboard' element={<AdminDashboard />} />
+        <Route path='/createQuiz' element={<CreateQuiz name={name} updateName={updateName} code={code} updateCode={updateCode} />} />
+        <Route path='/createQuiz/questions' element={<QuestionsWithGpt questions={questions} updateQuestions={updateQuestions} currQuestionInd={currQuestionInd} updateCurrQuestionInd={updateCurrQuestionInd} />} />
+        <Route path='/createQuiz/Questions/AllQuestion' element={<AllQuestion name={name} code={code} />} />
 
       </Routes>
     </div>

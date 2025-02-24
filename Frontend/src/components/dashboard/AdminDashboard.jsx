@@ -14,6 +14,7 @@ import {
   TrendingUp,
   User
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 // Sample demo data
 const createdQuizzes = [
@@ -67,131 +68,18 @@ function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('quizzes');
   const [selectedQuiz, setSelectedQuiz] = useState(null);
   const [showQuizDetails, setShowQuizDetails] = useState(false);
-  const [showCreateQuiz, setShowCreateQuiz] = useState(false);
+  // const [showCreateQuiz, setShowCreateQuiz] = useState(false);
 
-  const renderQuizCreation = () => (
-    <div className="bg-white rounded-lg p-6 shadow-md">
-      <h3 className="text-xl font-semibold mb-6">Create New Quiz</h3>
-      <form className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Quiz Name</label>
-            <input
-              type="text"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              placeholder="Enter quiz name"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Section</label>
-            <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
-              <option>Mathematics</option>
-              <option>Physics</option>
-              <option>Chemistry</option>
-              <option>Biology</option>
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Duration (minutes)</label>
-            <input
-              type="number"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              placeholder="Enter duration"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Total Questions</label>
-            <input
-              type="number"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              placeholder="Enter number of questions"
-            />
-          </div>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Questions</label>
-          <div className="space-y-4">
-            <div className="border border-gray-200 rounded-lg p-4">
-              <div className="flex justify-between items-start mb-4">
-                <input
-                  type="text"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  placeholder="Enter question"
-                />
-                <button className="ml-4 text-red-500 hover:text-red-700">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <input
-                  type="text"
-                  className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  placeholder="Option 1"
-                />
-                <input
-                  type="text"
-                  className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  placeholder="Option 2"
-                />
-                <input
-                  type="text"
-                  className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  placeholder="Option 3"
-                />
-                <input
-                  type="text"
-                  className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  placeholder="Option 4"
-                />
-              </div>
-              <div className="mt-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Correct Answer</label>
-                <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                  <option>Option 1</option>
-                  <option>Option 2</option>
-                  <option>Option 3</option>
-                  <option>Option 4</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <button
-            type="button"
-            className="mt-4 text-indigo-600 hover:text-indigo-800 font-medium flex items-center"
-          >
-            <PlusCircle className="w-4 h-4 mr-2" />
-            Add Question
-          </button>
-        </div>
-
-        <div className="flex justify-end space-x-4">
-          <button
-            type="button"
-            className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
-            onClick={() => setShowCreateQuiz(false)}
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
-          >
-            Create Quiz
-          </button>
-        </div>
-      </form>
-    </div>
-  );
-
+  const navigate = useNavigate();
+  const createQuiz = ()=>{
+    navigate('/createQuiz');
+  }
   const renderQuizList = () => (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-semibold text-gray-800">Created Quizzes</h2>
         <button
-          onClick={() => setShowCreateQuiz(true)}
+          onClick={createQuiz}
           className="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
         >
           <PlusCircle className="w-5 h-5 mr-2" />
@@ -356,9 +244,6 @@ function AdminDashboard() {
   };
 
   const renderContent = () => {
-    if (showCreateQuiz) {
-      return renderQuizCreation();
-    }
     if (selectedQuiz) {
       return renderQuizDetails();
     }
@@ -398,7 +283,6 @@ function AdminDashboard() {
                   onClick={() => {
                     setActiveTab('quizzes');
                     setSelectedQuiz(null);
-                    setShowCreateQuiz(false);
                   }}
                   className={`w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg transition-colors ${
                     activeTab === 'quizzes' ? 'bg-indigo-50 text-indigo-600' : 'text-gray-600 hover:bg-gray-50'
@@ -432,9 +316,6 @@ function AdminDashboard() {
         <div className="flex-1 ml-64">
           <header className="bg-white shadow-sm">
             <div className="px-8 py-6">
-              <h1 className="text-2xl font-bold text-gray-800">
-                {showCreateQuiz ? 'Create New Quiz' : 'Quiz Management'}
-              </h1>
             </div>
           </header>
 

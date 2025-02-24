@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import { logIn, logout } from "../../redux/userSlice";
 import {
   Layout,
   User,
@@ -8,8 +9,10 @@ import {
   LogOut,
   ChevronRight,
   Award,
-  Clock
-} from 'lucide-react';
+  Clock,
+} from "lucide-react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 // Sample demo data
 const attemptedQuizzes = [
@@ -21,8 +24,8 @@ const attemptedQuizzes = [
     duration: "45 min",
     responses: [
       { question: "2+2", answer: "4", correctAnswer: "4", isCorrect: true },
-      { question: "5+3", answer: "7", correctAnswer: "8", isCorrect: false }
-    ]
+      { question: "5+3", answer: "7", correctAnswer: "8", isCorrect: false },
+    ],
   },
   {
     name: "Science Quiz",
@@ -31,9 +34,14 @@ const attemptedQuizzes = [
     date: "2024-03-08",
     duration: "30 min",
     responses: [
-      { question: "What is water?", answer: "H2O", correctAnswer: "H2O", isCorrect: true }
-    ]
-  }
+      {
+        question: "What is water?",
+        answer: "H2O",
+        correctAnswer: "H2O",
+        isCorrect: true,
+      },
+    ],
+  },
 ];
 
 const availableQuizzes = [
@@ -42,25 +50,35 @@ const availableQuizzes = [
     description: "Test your knowledge of world history",
     difficulty: "Easy",
     duration: "30 min",
-    questions: 20
+    questions: 20,
+    code:"3kdf",
   },
   {
     name: "Geography Quiz",
     description: "Explore countries, capitals, and landmarks",
     difficulty: "Medium",
     duration: "45 min",
-    questions: 25
-  }
+    questions: 25,
+    code:"98idj",
+  },
 ];
 
 function UserDashboard() {
-  const [activeTab, setActiveTab] = useState('attempted');
+  const [activeTab, setActiveTab] = useState("attempted");
   const [selectedQuiz, setSelectedQuiz] = useState(null);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-
+  
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const logoutHandler = ()=>{
+      localStorage.removeItem('token');
+      localStorage.removeItem('role');
+      dispatch(logout());
+      navigate('/');
+  }
   const renderContent = () => {
     switch (activeTab) {
-      case 'attempted':
+      case "attempted":
         return (
           <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -72,12 +90,16 @@ function UserDashboard() {
                 >
                   <div className="flex justify-between items-start mb-4">
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-800">{quiz.name}</h3>
+                      <h3 className="text-lg font-semibold text-gray-800">
+                        {quiz.name}
+                      </h3>
                       <p className="text-sm text-gray-500">Code: {quiz.code}</p>
                     </div>
                     <div className="flex items-center">
                       <Award className="w-5 h-5 text-indigo-500 mr-1" />
-                      <span className="text-lg font-bold text-indigo-500">{quiz.marks}%</span>
+                      <span className="text-lg font-bold text-indigo-500">
+                        {quiz.marks}%
+                      </span>
                     </div>
                   </div>
                   <div className="flex items-center text-sm text-gray-600">
@@ -92,16 +114,22 @@ function UserDashboard() {
 
             {selectedQuiz && (
               <div className="mt-8 bg-white rounded-lg p-6 shadow-lg">
-                <h3 className="text-xl font-semibold mb-4">{selectedQuiz.name} - Detailed Results</h3>
+                <h3 className="text-xl font-semibold mb-4">
+                  {selectedQuiz.name} - Detailed Results
+                </h3>
                 <div className="space-y-4">
                   {selectedQuiz.responses.map((response, index) => (
                     <div
                       key={index}
                       className={`p-4 rounded-lg ${
-                        response.isCorrect ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'
+                        response.isCorrect
+                          ? "bg-green-50 border border-green-200"
+                          : "bg-red-50 border border-red-200"
                       }`}
                     >
-                      <p className="font-medium mb-2">Question {index + 1}: {response.question}</p>
+                      <p className="font-medium mb-2">
+                        Question {index + 1}: {response.question}
+                      </p>
                       <div className="grid grid-cols-2 gap-4 text-sm">
                         <div>
                           <p className="text-gray-600">Your Answer:</p>
@@ -109,7 +137,9 @@ function UserDashboard() {
                         </div>
                         <div>
                           <p className="text-gray-600">Correct Answer:</p>
-                          <p className="font-medium">{response.correctAnswer}</p>
+                          <p className="font-medium">
+                            {response.correctAnswer}
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -120,38 +150,52 @@ function UserDashboard() {
           </div>
         );
 
-      case 'available':
+      case "available":
         return (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {availableQuizzes.map((quiz, index) => (
-              <div key={index} className="bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow">
-                <h3 className="text-lg font-semibold text-gray-800 mb-2">{quiz.name}</h3>
-                <p className="text-gray-600 mb-4">{quiz.description}</p>
-                <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
-                  <span className="flex items-center">
-                    <Clock className="w-4 h-4 mr-1" />
-                    {quiz.duration}
-                  </span>
-                  <span className="flex items-center">
-                    <ClipboardList className="w-4 h-4 mr-1" />
-                    {quiz.questions} Questions
-                  </span>
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium
-                    ${quiz.difficulty === 'Easy' ? 'bg-green-100 text-green-800' :
-                      quiz.difficulty === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
-                      'bg-red-100 text-red-800'}`}>
-                    {quiz.difficulty}
-                  </span>
-                </div>
-                <button className="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition-colors">
-                  Start Quiz
-                </button>
+          {availableQuizzes.map((quiz, index) => (
+            <div
+              key={index}
+              className="bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow"
+            >
+              <div className="flex justify-between items-center mb-2">
+                <h3 className="text-lg font-semibold text-gray-800">
+                  {quiz.name}
+                </h3>
+                <p className="text-sm text-gray-500">Code: {quiz.code}</p>
               </div>
-            ))}
-          </div>
+              <p className="text-gray-600 mb-4">{quiz.description}</p>
+              <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
+                <span className="flex items-center">
+                  <Clock className="w-4 h-4 mr-1" />
+                  {quiz.duration}
+                </span>
+                <span className="flex items-center">
+                  <ClipboardList className="w-4 h-4 mr-1" />
+                  {quiz.questions} Questions
+                </span>
+                <span
+                  className={`px-2 py-1 rounded-full text-xs font-medium
+                    ${
+                      quiz.difficulty === "Easy"
+                        ? "bg-green-100 text-green-800"
+                        : quiz.difficulty === "Medium"
+                        ? "bg-yellow-100 text-yellow-800"
+                        : "bg-red-100 text-red-800"
+                    }`}
+                >
+                  {quiz.difficulty}
+                </span>
+              </div>
+              <button className="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition-colors">
+                Start Quiz
+              </button>
+            </div>
+          ))}
+        </div>
         );
 
-      case 'settings':
+      case "settings":
         return (
           <div className="bg-white rounded-lg p-6 shadow-md max-w-2xl mx-auto">
             <h3 className="text-xl font-semibold mb-6">Profile Settings</h3>
@@ -170,7 +214,9 @@ function UserDashboard() {
                 <div className="flex-1">
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700">Name</label>
+                      <label className="block text-sm font-medium text-gray-700">
+                        Name
+                      </label>
                       <input
                         type="text"
                         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
@@ -178,7 +224,9 @@ function UserDashboard() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700">Email</label>
+                      <label className="block text-sm font-medium text-gray-700">
+                        Email
+                      </label>
                       <input
                         type="email"
                         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
@@ -211,7 +259,9 @@ function UserDashboard() {
             <div className="p-6">
               <div className="flex items-center space-x-3">
                 <Layout className="w-8 h-8 text-indigo-600" />
-                <span className="text-xl font-bold text-gray-800">QuizMaster</span>
+                <span className="text-xl font-bold text-gray-800">
+                  QuizMaster
+                </span>
               </div>
             </div>
 
@@ -223,7 +273,9 @@ function UserDashboard() {
                   className="w-10 h-10 rounded-full"
                 />
                 <div>
-                  <h3 className="text-sm font-medium text-gray-800">John Doe</h3>
+                  <h3 className="text-sm font-medium text-gray-800">
+                    John Doe
+                  </h3>
                   <p className="text-xs text-gray-500">john@example.com</p>
                 </div>
               </div>
@@ -232,27 +284,33 @@ function UserDashboard() {
             <nav className="flex-1 px-4 py-4">
               <div className="space-y-1">
                 <button
-                  onClick={() => setActiveTab('attempted')}
+                  onClick={() => setActiveTab("attempted")}
                   className={`w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg transition-colors ${
-                    activeTab === 'attempted' ? 'bg-indigo-50 text-indigo-600' : 'text-gray-600 hover:bg-gray-50'
+                    activeTab === "attempted"
+                      ? "bg-indigo-50 text-indigo-600"
+                      : "text-gray-600 hover:bg-gray-50"
                   }`}
                 >
                   <ClipboardList className="w-5 h-5" />
                   <span>Attempted Quizzes</span>
                 </button>
                 <button
-                  onClick={() => setActiveTab('available')}
+                  onClick={() => setActiveTab("available")}
                   className={`w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg transition-colors ${
-                    activeTab === 'available' ? 'bg-indigo-50 text-indigo-600' : 'text-gray-600 hover:bg-gray-50'
+                    activeTab === "available"
+                      ? "bg-indigo-50 text-indigo-600"
+                      : "text-gray-600 hover:bg-gray-50"
                   }`}
                 >
                   <BookOpen className="w-5 h-5" />
                   <span>Available Quizzes</span>
                 </button>
                 <button
-                  onClick={() => setActiveTab('settings')}
+                  onClick={() => setActiveTab("settings")}
                   className={`w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg transition-colors ${
-                    activeTab === 'settings' ? 'bg-indigo-50 text-indigo-600' : 'text-gray-600 hover:bg-gray-50'
+                    activeTab === "settings"
+                      ? "bg-indigo-50 text-indigo-600"
+                      : "text-gray-600 hover:bg-gray-50"
                   }`}
                 >
                   <Settings className="w-5 h-5" />
@@ -262,7 +320,8 @@ function UserDashboard() {
             </nav>
 
             <div className="p-4 mt-auto">
-              <button className="w-full flex items-center space-x-3 px-4 py-2.5 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
+              <button className="w-full flex items-center space-x-3 px-4 py-2.5 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors"
+                onClick={logoutHandler}>
                 <LogOut className="w-5 h-5" />
                 <span>Logout</span>
               </button>
@@ -275,16 +334,14 @@ function UserDashboard() {
           <header className="bg-white shadow-sm">
             <div className="px-8 py-6">
               <h1 className="text-2xl font-bold text-gray-800">
-                {activeTab === 'attempted' && 'Attempted Quizzes'}
-                {activeTab === 'available' && 'Available Quizzes'}
-                {activeTab === 'settings' && 'Settings'}
+                {activeTab === "attempted" && "Attempted Quizzes"}
+                {activeTab === "available" && "Available Quizzes"}
+                {activeTab === "settingconst [available]s" && "Settings"}
               </h1>
             </div>
           </header>
 
-          <main className="px-8 py-6">
-            {renderContent()}
-          </main>
+          <main className="px-8 py-6">{renderContent()}</main>
         </div>
       </div>
     </div>

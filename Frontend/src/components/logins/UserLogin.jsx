@@ -45,7 +45,7 @@ const UserLogin = () => {
         localStorage.setItem('role',role);
         setIsLoginOpen(false);
         dispatch(logIn({ name:response.data.user.name, email }));
-        navigate('/attemptQuiz');
+        navigate('/UserDashboard');
       } else {
         setValid(false);
         console.log("Unable to log you in, try again.");
