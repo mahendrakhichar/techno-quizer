@@ -15,6 +15,8 @@ import {
   User
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { logIn, logout } from "../../redux/userSlice";
 
 // Sample demo data
 const createdQuizzes = [
@@ -73,6 +75,13 @@ function AdminDashboard() {
   const navigate = useNavigate();
   const createQuiz = ()=>{
     navigate('/createQuiz');
+  }
+  const dispatch = useDispatch();
+  const logoutHandler = ()=>{
+      localStorage.removeItem('token');
+      localStorage.removeItem('role');
+      dispatch(logout());
+      navigate('/');
   }
   const renderQuizList = () => (
     <div className="space-y-6">
@@ -304,7 +313,8 @@ function AdminDashboard() {
             </nav>
 
             <div className="p-4 mt-auto">
-              <button className="w-full flex items-center space-x-3 px-4 py-2.5 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
+              <button className="w-full flex items-center space-x-3 px-4 py-2.5 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors"
+                onClick={logoutHandler}>
                 <LogOut className="w-5 h-5" />
                 <span>Logout</span>
               </button>

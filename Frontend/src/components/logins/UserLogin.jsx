@@ -20,7 +20,7 @@ const UserLogin = () => {
 
   const signup = async () => {
     try {
-      const response = await axios.post('/api/userAuth/signup: response.data.user.name,', { name, email, password });
+      const response = await axios.post('/api/userAuth/signup', { name, email, password });
       console.log(response);
       if (response.data.success) {
         setIsSignUpOpen(false);
@@ -45,7 +45,7 @@ const UserLogin = () => {
         localStorage.setItem('role',role);
         setIsLoginOpen(false);
         dispatch(logIn({ name:response.data.user.name, email }));
-        navigate('/UserDashboard');
+        navigate('/attemptQuiz');
       } else {
         setValid(false);
         console.log("Unable to log you in, try again.");

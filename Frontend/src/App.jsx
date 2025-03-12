@@ -15,6 +15,7 @@ import PrivateRoute from './components/privateRoute/PrivateRoute';
 import { Ruler, User } from 'lucide-react';
 import UserDashboard from './components/dashboard/UserDashboard';
 import AdminDashboard from './components/dashboard/AdminDashboard';
+import Questions from './components/createQuiz/Questions';
 
 function App() {
   const { loggedIn } = useSelector((state) => state.user);
@@ -87,6 +88,8 @@ function App() {
         <Route path='/UserDashboard' element={<UserDashboard />} />
         <Route path='/attemptQuiz' element={<QuizList />} />
         <Route path='/quiz' element={<Quiz />} />
+        {/* <Route path='/test' element={<Questions questions={questions} updateQuestions={updateQuestions} currQuestionInd={currQuestionInd} updateCurrQuestionInd={updateCurrQuestionInd} />} /> */}
+
         <Route path='/AdminDashboard' element={<AdminDashboard />} />
         <Route path='/createQuiz' element={<CreateQuiz name={name} updateName={updateName} code={code} updateCode={updateCode} />} />
         <Route path='/createQuiz/questions' element={<QuestionsWithGpt questions={questions} updateQuestions={updateQuestions} currQuestionInd={currQuestionInd} updateCurrQuestionInd={updateCurrQuestionInd} />} />

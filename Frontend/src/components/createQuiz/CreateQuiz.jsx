@@ -3,12 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { IoIosRocket, IoIosCheckmarkCircleOutline } from 'react-icons/io'; // Icons for quiz vibe
 
-const CreateQuiz = () => {
+const CreateQuiz = ({name, updateName, code, updateCode}) => {
   const navigate = useNavigate();
 
   // State for quiz details
-  const [name, setName] = useState('');
-  const [code, setCode] = useState('');
+  // const [name, setName] = useState('');
+  // const [code, setCode] = useState('');
   const [duration, setDuration] = useState('');
   const [totalQuestions, setTotalQuestions] = useState('');
   const [uniqueCode, setUniqueCode] = useState(false);
@@ -59,7 +59,7 @@ const CreateQuiz = () => {
               type="text"
               placeholder="Enter your Quiz name"
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => updateName(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-teal-500 focus:outline-none"
             />
           </div>
@@ -71,7 +71,7 @@ const CreateQuiz = () => {
               type="text"
               placeholder="Enter your Quiz code"
               value={code}
-              onChange={(e) => setCode(e.target.value)}
+              onChange={(e) => updateCode(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-teal-500 focus:outline-none"
             />
             {/* Code Status Message */}

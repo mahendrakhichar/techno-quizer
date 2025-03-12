@@ -3,8 +3,8 @@ import { createQuiz, getQuizes, checkCode } from '../Controllers/quizController.
 import authMiddleware from '../middleware/authMiddleware.js';
 const router = express.Router();
 
-router.post('/createQuiz',authMiddleware, createQuiz);
-router.get('/quizzesList',authMiddleware, getQuizes);   
+router.post('/createQuiz', createQuiz);
+router.get('/quizzesList', getQuizes);   
 router.get('/checkCode/:code', checkCode) 
 
 export default router;

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { Bot, Send, Loader2 } from 'lucide-react';  // Additional Lucide icons
+import { Bot, Send, Loader2 } from 'lucide-react';  
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
@@ -27,14 +27,16 @@ const ChatBot = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-gray-50 to-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-30" style={{
+    <div className="relative bg-gradient-to-b from-white via-gray-50 to-gray-100 py-12 px-4 sm:px-6 lg:px-8 chatbot-container">
+      
+      {/* Background Pattern - FIXED */}
+      <div className="absolute inset-0 opacity-30 pointer-events-none" style={{
         backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f1f5f9' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
       }}></div>
 
-      <div className="relative max-w-4xl mx-auto">
+      <div className="relative max-w-4xl mx-auto z-10">
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+          
           {/* Chatbot Header */}
           <div className="px-8 py-6 bg-gradient-to-r from-blue-600 to-indigo-600">
             <div className="flex items-center space-x-4">
@@ -57,9 +59,9 @@ const ChatBot = () => {
               </p>
             </div>
 
-            {/* Chat Form */}
+            {/* Chat Form - FIXED relative positioning */}
             <form onSubmit={searchHandler} className="space-y-4">
-              <div className="relative">
+              <div className="relative w-full">
                 <input
                   id="userSearch"
                   type="text"
@@ -71,13 +73,9 @@ const ChatBot = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-lg bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-3 rounded-lg bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
                 >
-                  {loading ? (
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                  ) : (
-                    <Send className="w-5 h-5" />
-                  )}
+                  {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
                 </button>
               </div>
             </form>

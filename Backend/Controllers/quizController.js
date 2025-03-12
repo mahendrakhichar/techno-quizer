@@ -6,6 +6,7 @@ const createQuiz = async (req, res) => {
         console.log(quizData);
 
         if (!quizData || !quizData.name || !quizData.code || !quizData.totalQuestions) {
+            console.log("Inside if block");
             return res.status(400).json({ message: 'Invalid quiz data provided' });
         }
 
