@@ -5,7 +5,8 @@ A full-stack web application where users can register as **Students** or **Admin
 
 ## 🌟 Live Demo
 
-Visit the live site: Cooming soon
+Visit the live site: https://techno-quizer.vercel.app/
+backend is live on Render.com
 
 ## 🚀 Features
 
