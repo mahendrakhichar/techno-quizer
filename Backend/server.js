@@ -15,10 +15,21 @@ const port = 5000;
 connectDB();
 
 // Middleware
+const allowedOrigins = [
+  'http://localhost:5173', 
+  'https://techno-quizer.vercel.app'
+];
+
 app.use(cors({
-  origin: 'http://localhost:5173', // Allow frontend dev server
-  methods: ['GET', 'POST'], // Allowed methods
-  credentials: true // Allow credentials
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST'],
+  credentials: true
 }));
 app.use(express.json());
 
