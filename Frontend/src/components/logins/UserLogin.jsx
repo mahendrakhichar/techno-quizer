@@ -6,6 +6,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { logIn, logout } from "../../redux/userSlice";
 
+const API_BASE_URL = "https://techno-quizer-2.onrender.com";
 const UserLogin = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -20,7 +21,7 @@ const UserLogin = () => {
 
   const signup = async () => {
     try {
-      const response = await axios.post('/api/userAuth/signup', { name, email, password });
+      const response = await axios.post(`${API_BASE_URL}/userAuth/signup`, { name, email, password });
       console.log(response);
       if (response.data.success) {
         setIsSignUpOpen(false);

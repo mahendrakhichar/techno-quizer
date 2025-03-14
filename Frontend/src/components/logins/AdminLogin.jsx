@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logIn,logout } from "../../redux/adminSlice";
 
+const API_BASE_URL = "https://techno-quizer-2.onrender.com";
 const AdminLogin = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -29,7 +30,7 @@ const AdminLogin = () => {
 
   const signup = async () => {
     try {
-      const response = await axios.post('/api/adminAuth/signup', { name, email, password });
+      const response = await axios.post(`${API_BASE_URL}/adminAuth/signup`, { name, email, password });
       console.log(response.data.message);
       if (response.data.success) {
         // Assuming you want to close the modal and maybe redirect after signup success.
