@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiSearch } from "react-icons/fi"; // Importing search icon
 
+const API_BASE_URL = "https://techno-quizer-2.onrender.com";
 const QuizList = () => {
   const [quizes, setQuizes] = useState([]);
   const [filteredQuizes, setFilteredQuizes] = useState([]);
@@ -18,7 +19,7 @@ const QuizList = () => {
       return;
     }
     try {
-      const response = await axios.get("/api/quizzes/quizzesList",
+      const response = await axios.get(`${API_BASE_URL}/quizzes/quizzesList`,
         {
           headers:{
             'Authorization' : `Bearer ${token}`,

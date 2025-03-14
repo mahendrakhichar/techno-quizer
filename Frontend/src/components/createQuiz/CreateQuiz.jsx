@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { IoIosRocket, IoIosCheckmarkCircleOutline } from 'react-icons/io'; // Icons for quiz vibe
 
+const API_BASE_URL = "https://techno-quizer-2.onrender.com";
 const CreateQuiz = ({name, updateName, code, updateCode}) => {
   const navigate = useNavigate();
 
@@ -22,7 +23,7 @@ const CreateQuiz = ({name, updateName, code, updateCode}) => {
       setLoading(true);
       try {
         console.log("Checking code:", code); // Log the code value
-        const response = await axios.get(`/api/quizzes/checkCode/${code}`);
+        const response = await axios.get(`${API_BASE_URL}/quizzes/checkCode/${code}`);
         console.log(response.data.message); // Log the response for debugging
         setUniqueCode(true);
       } catch (err) {

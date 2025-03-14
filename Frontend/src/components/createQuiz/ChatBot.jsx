@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
 
+const API_BASE_URL = "https://techno-quizer-2.onrender.com";
 const ChatBot = () => {
   const [userSearch, setUserSearch] = useState('');
   const [gptAnswer, setGptAnswer] = useState('');
@@ -16,7 +17,7 @@ const ChatBot = () => {
 
     setLoading(true);
     try {
-      const response = await axios.post('/api/userQuestion/gpt', { question: userSearch });
+      const response = await axios.post(`${API_BASE_URL}/userQuestion/gpt`, { question: userSearch });
       setGptAnswer(response.data.message);
     } catch (err) {
       setGptAnswer("Sorry, there was an error fetching the answer. Please try again!");

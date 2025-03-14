@@ -2,6 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
 
+const API_BASE_URL = "https://techno-quizer-2.onrender.com";
 // eslint-disable-next-line react/prop-types
 const AllQuestion = ({ name, code }) => {
   const location = useLocation();
@@ -49,7 +50,7 @@ const AllQuestion = ({ name, code }) => {
         return;
       }
 
-      const response = await axios.post('/api/quizzes/createQuiz', data,{
+      const response = await axios.post(`${API_BASE_URL}/quizzes/createQuiz`, data,{
         headers:{
           'Authorization':`Bearer ${token}`,
         }
