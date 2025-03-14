@@ -37,7 +37,7 @@ const UserLogin = () => {
 
   const login = async () => {
     try {
-      const response = await axios.post('/api/userAuth/login', { email, password });
+      const response = await axios.post(`${API_BASE_URL}/userAuth/login`, { email, password });
       console.log(response.data);
       if (response.data.success) {
         const token = response.data.token;

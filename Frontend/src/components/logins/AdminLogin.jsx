@@ -48,7 +48,7 @@ const AdminLogin = () => {
 
   const login = async () => {
     try {
-      const response = await axios.post('/api/adminAuth/login', { email, password });
+      const response = await axios.post(`${API_BASE_URL}/adminAuth/login`, { email, password });
   
       console.log(response.data.message);
   
